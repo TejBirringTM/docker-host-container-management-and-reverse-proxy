@@ -1,0 +1,52 @@
+version: '3.7'
+
+services:
+
+  nginx-proxy-manager:
+    image: 'jc21/nginx-proxy-manager'
+    # container_name: nginx-proxy-manager.ain-i-akbari
+    restart: always
+    ports:
+      # These ports are in format <host-port>:<container-port>
+      - '80:80' # Public HTTP Port
+      - '443:443' # Public HTTPS Port
+      - '81:81' # Admin Web Port
+      # Add any other Stream port you want to expose
+      # - '21:21' # FTP
+    # Uncomment the next line if you uncomment anything in the section
+    # environment:
+      # Uncomment this if you want to change the location of
+      # the SQLite DB file within the container
+      # DB_SQLITE_FILE: "/data/database.sqlite"
+      # Uncomment this if IPv6 is not enabled on your host
+      # DISABLE_IPV6: 'true'
+    volumes:
+      - ./nginx-proxy-manager/data:/data
+      - ./nginx-proxy-manager/letsencrypt:/etc/letsencrypt
+    healthcheck:
+      test: ["CMD", "/usr/bin/check-health"]
+      interval: 10s
+      timeout: 3s
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    # container_name: portainer.ain-i-akbari
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    # environment:
+    #   - VIRTUAL_HOST=portainer.yourdomain.com
+    #   - VIRTUAL_PORT=9000
+    ports:
+      - 9443:9443
+      - 8000:8000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./portainer/data:/data
+    depends_on:
+      - nginx-proxy-manager      
+
+# Note: run cmd on host machine first: `docker network create internal`
+networks:
+  default:
+    external: true
+    name: internal
