@@ -3,8 +3,7 @@ version: '3.7'
 services:
 
   nginx-proxy-manager:
-    image: 'jc21/nginx-proxy-manager'
-    # container_name: nginx-proxy-manager.ain-i-akbari
+    image: jc21/nginx-proxy-manager
     restart: always
     ports:
       # These ports are in format <host-port>:<container-port>
@@ -30,7 +29,6 @@ services:
 
   portainer:
     image: portainer/portainer-ce:latest
-    # container_name: portainer.ain-i-akbari
     command: -H unix:///var/run/docker.sock
     restart: always
     # environment:
