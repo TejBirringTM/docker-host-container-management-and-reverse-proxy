@@ -9,7 +9,6 @@ services:
       # These ports are in format <host-port>:<container-port>
       - 80:80 # Public HTTP Port
       - 443:443 # Public HTTPS Port
-      # - 81 # Admin Web Port
       # Add any other Stream port you want to expose
       # - '21:21' # FTP
     # Uncomment the next line if you uncomment anything in the section
@@ -34,9 +33,6 @@ services:
     # environment:
     #   - VIRTUAL_HOST=portainer.yourdomain.com
     #   - VIRTUAL_PORT=9000
-    # ports:
-      # - 9443
-      # - 8000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./portainer/data:/data
